@@ -41,7 +41,7 @@ int main(){
   while(fgets(linha, TAM_MAX_LINHA, arquivoEntrada) != NULL){
     Tree * arvore = malloc(sizeof(Tree));
     char *tok;
-    printf("linha 109\n");
+    printf("linha 44\n");
     tok = strtok(linha, " ");
     while(tok != NULL){
       printf("linha 47\n");
@@ -60,19 +60,19 @@ int main(){
 //        i++;
         printf("linha 61 -> %d\n", i);
   //      printf("linha 62\n");
-        No * novo = criar_no(no1, no2);
+       No * novo = criar_no(no1, no2);
   //      printf("%d %d\n", novo->key, novo->mae->key);
         printf("%d %c\n", no2, no1);
-        if(novo->fazer == 'a') {
+        if(no1 == 'a') {
           tree_inserir(arvore, novo);
           printf("linha 68\n");}
-        else if(novo->fazer == 'r'){
+        else if(no1 == 'r'){
           printf("linha 70\n");
           if (tree_busca(arvore, no2)==NULL){
             tree_inserir(arvore, novo);
           }
           else {
-            tree_apagar(arvore, novo);
+            tree_apagar(arvore, tree_busca(arvore, no2));
             printf("linha 76\n");}
           }
         printf("linha 78\n");
@@ -87,8 +87,8 @@ int main(){
     fputs("\n", arquivoSaida);
   }
   l++;
-//  inorder_tree_walk(arvore->raiz);
-  tree_gravar(arvore->raiz);
+  inorder_tree_walk(arvore->raiz);
+ // tree_gravar(arvore->raiz);
   printf("linha 91\n");
   }
   
@@ -103,8 +103,10 @@ No  * criar_no(char tok, int key){
 
 void inorder_tree_walk(No * x){
     if(x!= NULL){
+        FILE *arquivoSaida = fopen("L2Q3.out", "w+");
         inorder_tree_walk(x->left);
-        printf(" %d ", x->key);
+        fprintf(arquivoSaida, "%d ", x->key);
+    //    printf(" %d ", x->key);
         inorder_tree_walk(x->right);
     }
 }
@@ -113,13 +115,16 @@ void tree_inserir(Tree * T, No * z){
     No * y = NULL;
     No * x = T->raiz;
     while(x != NULL){
-      printf("linha 115\n");
+      printf("linha 116\n");
         y  = x;
         if (z->key < x->key) x = x->left;
         else x = x->right;
     }
     z->mae = y;
-    if(y== NULL) T->raiz = z;
+    if(y== NULL) {
+      printf("linha 123\n");
+      T->raiz = z;
+    }
     else if (z->key < y->key) y->left = z;
     else y->right = z; 
 }
@@ -168,15 +173,15 @@ void tree_apagar(Tree * T, No * z){
 
   void tree_gravar(No * raiz){  
 
- /*   if (raiz == NULL) {
+    if (raiz == NULL) {
       printf("gravar raiz nula\n");
       return;
     }
-    else { */
+    else { 
       FILE *arquivoSaida = fopen("L2Q3.out", "w+");
       printf("gravar arvore\n");
       tree_gravar(raiz->left);
       fprintf(arquivoSaida, "%d ", raiz->key);
       tree_gravar(raiz->right);
-  //    } 
+      } 
   }
