@@ -23,7 +23,8 @@ No * tree_busca(Tree * T, int k);
 No * tree_minimo(No * x);
 No * tree_successor(No * x);
 void tree_apagar(Tree * T, No * z);
-void tree_gravar(No * raiz);
+void tree_gravar(FILE *arquivoSaida, No * x, int nivel);
+int tamanhoNo(No * x);
 
 int main(){
 
@@ -35,9 +36,11 @@ int main(){
         printf("%s\n", "Falha na criação dos arquivos!");
         return EXIT_FAILURE;
   }
-  fclose(arquivoSaida);
+//  fclose(arquivoSaida);
+
 
   char linha[TAM_MAX_LINHA];
+  
   while(fgets(linha, TAM_MAX_LINHA, arquivoEntrada) != NULL){
     Tree * arvore = malloc(sizeof(Tree));
     char *tok;
@@ -82,16 +85,24 @@ int main(){
       tok=strtok(NULL, " "); 
     }
   printf("linha 84 %d\n", l);
+//  inorder_tree_walk(arvore->raiz);
+
   if (l>0){
+ //   FILE *arquivoSaida = fopen("L2Q3.out", "w");
     printf("linha 86\n");
     fputs("\n", arquivoSaida);
   }
+    tree_gravar(arquivoSaida, arvore->raiz, 0);
   l++;
-  inorder_tree_walk(arvore->raiz);
- // tree_gravar(arvore->raiz);
+ // fclose(arquivoSaida);
+  tree_apagar(arvore, arvore->raiz);
+
   printf("linha 91\n");
+//  fclose(arquivoSaida);
   }
-  
+fclose(arquivoSaida);
+fclose(arquivoEntrada);
+//tree_apagar(arvore, arvore->raiz);
 }
 
 No  * criar_no(char tok, int key){
@@ -103,9 +114,10 @@ No  * criar_no(char tok, int key){
 
 void inorder_tree_walk(No * x){
     if(x!= NULL){
-        FILE *arquivoSaida = fopen("L2Q3.out", "w+");
+   //     FILE *arquivoSaida = fopen("L2Q3.out", "a");
         inorder_tree_walk(x->left);
-        fprintf(arquivoSaida, "%d ", x->key);
+//        printf("gravar insert %c %d\n", x->fazer, x->key);
+      //  fprintf(arquivoSaida, "%d (%d)", x->key, nivel);
     //    printf(" %d ", x->key);
         inorder_tree_walk(x->right);
     }
@@ -171,17 +183,27 @@ void tree_apagar(Tree * T, No * z){
     free(y);
 }
 
-  void tree_gravar(No * raiz){  
+  void tree_gravar(FILE *arquivoSaida, No * x, int nivel){  
 
-    if (raiz == NULL) {
-      printf("gravar raiz nula\n");
+    if(x== NULL){
+      printf("linha 189\n");
       return;
     }
-    else { 
-      FILE *arquivoSaida = fopen("L2Q3.out", "w+");
-      printf("gravar arvore\n");
-      tree_gravar(raiz->left);
-      fprintf(arquivoSaida, "%d ", raiz->key);
-      tree_gravar(raiz->right);
-      } 
+  
+    if(x != NULL){
+
+      tree_gravar(arquivoSaida, x->left, nivel + 1);
+ //     FILE *arquivoSaida = fopen("L2Q3.out", "a");
+      fprintf(arquivoSaida, "%d (%d) ", x->key, nivel);
+   //   fprintf(arquivoSaida, "%d (%d) ", x->key, nivel);
+      tree_gravar(arquivoSaida, x->right, nivel + 1);
+
+      
+    }
+
   }
+
+int tamanhoNo(No * x){
+    if(x == NULL) return 0;
+    else return 1 + tamanhoNo(x->left) + tamanhoNo(x->right);
+}
