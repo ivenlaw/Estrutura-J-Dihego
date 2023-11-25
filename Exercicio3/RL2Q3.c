@@ -23,6 +23,7 @@ No * tree_busca(Tree * T, int k);
 No * tree_minimo(No * x);
 No * tree_successor(No * x);
 void tree_apagar(Tree * T, No * z);
+void destroiTree(No * Z);
 void tree_gravar(FILE *arquivoSaida, No * x, int nivel);
 int tamanhoNo(No * x);
 
@@ -91,15 +92,21 @@ int main(){
  //   FILE *arquivoSaida = fopen("L2Q3.out", "w");
     printf("linha 86\n");
     fputs("\n", arquivoSaida);
-  }
     tree_gravar(arquivoSaida, arvore->raiz, 0);
-  l++;
+//    destroiTree(arvore->raiz);
+  } else {
+    l++;
+    tree_gravar(arquivoSaida, arvore->raiz, 0);
+  }
+
+
  // fclose(arquivoSaida);
-  tree_apagar(arvore, arvore->raiz);
+ // tree_apagar(arvore, arvore->raiz);
 
   printf("linha 91\n");
 //  fclose(arquivoSaida);
   }
+
 fclose(arquivoSaida);
 fclose(arquivoEntrada);
 //tree_apagar(arvore, arvore->raiz);
@@ -181,6 +188,19 @@ void tree_apagar(Tree * T, No * z){
     }
     if(y!=z) z->key = y->key;
     free(y);
+}
+
+void destroiTree(No * Z) {
+    if (Z == NULL) {
+        return;
+    }
+
+    // Apagar os filhos recursivamente (pós-ordem)
+      destroiTree(Z->left);
+      destroiTree(Z->right);
+
+    // Liberar a memória do nó atual
+    free(Z);
 }
 
   void tree_gravar(FILE *arquivoSaida, No * x, int nivel){  
