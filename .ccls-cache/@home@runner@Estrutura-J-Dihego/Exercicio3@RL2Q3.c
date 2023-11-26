@@ -41,7 +41,7 @@ int main(){
 
 
   char linha[TAM_MAX_LINHA];
-  
+
   while(fgets(linha, TAM_MAX_LINHA, arquivoEntrada) != NULL){
     Tree * arvore = malloc(sizeof(Tree));
     char *tok;
@@ -99,7 +99,7 @@ int main(){
     tree_gravar(arquivoSaida, arvore->raiz, 0);
   }
 
-
+//    destroiTree(arvore->raiz);
  // fclose(arquivoSaida);
  // tree_apagar(arvore, arvore->raiz);
 
@@ -181,7 +181,7 @@ void tree_apagar(Tree * T, No * z){
     if(y->left != NULL) x = y->left;
     else x = y->right;
     if(x!=NULL) x->mae = y->mae;
-    if(y->mae == NULL) T->raiz = x;
+    if(y->mae == NULL) T->raiz = x;  //raiz
     else{
         if(y == y->mae->left) y->mae->left =  x;
         else y->mae->right = x;
@@ -209,7 +209,7 @@ void destroiTree(No * Z) {
       printf("linha 189\n");
       return;
     }
-  
+
     if(x != NULL){
 
       tree_gravar(arquivoSaida, x->left, nivel + 1);
@@ -218,7 +218,7 @@ void destroiTree(No * Z) {
    //   fprintf(arquivoSaida, "%d (%d) ", x->key, nivel);
       tree_gravar(arquivoSaida, x->right, nivel + 1);
 
-      
+
     }
 
   }
@@ -227,3 +227,4 @@ int tamanhoNo(No * x){
     if(x == NULL) return 0;
     else return 1 + tamanhoNo(x->left) + tamanhoNo(x->right);
 }
+
